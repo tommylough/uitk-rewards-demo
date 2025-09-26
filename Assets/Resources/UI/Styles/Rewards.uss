@@ -1,0 +1,212 @@
+.mobile-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    justify-content: space-between;
+    padding: 60px 10px;
+    background-color: blueviolet;
+    -unity-font-definition: url("/Assets/Resources/Fonts/Atma-Medium SDF.asset");
+    color: blueviolet;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.rewards-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.reward-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.reward-container-panel-mask {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    height: 360px;
+}
+
+.reward-container-panel {
+    position: absolute;
+    top: -320px;
+    width: 300px;
+    height: 320px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition-property: top;
+    transition-timing-function: ease-out-bounce;
+    transition-duration: 0.4s;
+}
+
+.buttons-container {
+    margin-top: auto;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 40px;
+    width: 100%;
+}
+
+.reward-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 110px;
+}
+
+.reward-button-label {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.reward-top-ribbon {
+    position: absolute;
+    width: 500px;
+    height: 112px;
+    top: -30px;
+    scale: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    transition-property: scale;
+    transition-timing-function: ease-out-back;
+    transition-duration: 0.4s;
+}
+
+.curved-text-container {
+    position: absolute;
+    top: 480px;
+    width: 100%;
+    height: 100%;
+    rotate: -12deg;
+    left: -5px;
+    color: blueviolet;
+}
+
+.curved-text {
+    transition-property: scale, opacity;
+    transition-timing-function: ease-out-bounce;
+    transition-duration: 0.4s;
+    scale: 5;
+    opacity: 0;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.show-reward-panel {
+    top: 40px;
+}
+
+.show-reward-top-ribbon {
+    scale: 1;
+}
+
+.show-cured-text {
+    scale: 1;
+    opacity: 1;
+}
+
+.roulette-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.roulette-mask {
+    position: absolute;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 200px;
+}
+
+.roulette-cover {
+    position: absolute;
+    width: 150px;
+    height: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: resource("Images/ui_wheel_cover");
+}
+
+.roulette-strip {
+    position: absolute;
+    align-items: center;
+    width: 150px;
+    height: 2000px;
+    background-color: lightgray;
+}
+
+.roulette-strip-image {
+    display: flex;
+    width: 120px;
+    height: 120px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 10px 0;
+}
+
+
+.shake-element {
+    transition-property: translate;
+    transition-duration: 0.05s;
+    transition-timing-function: ease-out;
+}
+
+.shake-element--shaking {
+    transition-duration: 0.03s;
+    transition-timing-function: ease-in-out;
+}
+
+.flash-sparkle {
+    position: absolute;
+    width: 220px;
+    height: 300px;
+    scale: 0;
+    opacity: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: resource("Images/wheel_sparkle");
+    transition-property: scale, opacity;
+    transition-timing-function: ease-in-elastic;
+    transition-duration: 0.15s;
+}
+
+.flash-cover {
+    position: absolute;
+    width: 150px;
+    height: 520px;
+    scale: 0;
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-image: resource("Images/wheel_flash");
+    transition-property: scale, opacity;
+    transition-timing-function: ease-in-elastic;
+    transition-duration: 0.09s;
+    transition-delay: 0.03s;
+}
+
+.disableButton {
+    opacity: 0.6;
+    picking-mode: ignore;
+}
