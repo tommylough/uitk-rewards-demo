@@ -19,7 +19,7 @@ MonoBehaviour:
   spinScheduleIntervalMs: 10
   effectStartDelayMs: 1000
   stopSpinDuration: 1
-  soundFadeDuration: 0.2
+  soundFadeDuration: 0.01
   sparkleEffectDuration: 0.07
   sparkleLoopCount: 2
   flashEffectDuration: 0.1
