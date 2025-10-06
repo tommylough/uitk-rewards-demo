@@ -51,7 +51,7 @@ public class ParticleRenderTexture : MonoBehaviour
     {
         if (renderTexture == null)
         {
-            renderTexture = new RenderTexture(textureWidth, textureHeight, 0, RenderTextureFormat.DefaultHDR);
+            renderTexture = new RenderTexture(textureWidth, textureHeight, 24, RenderTextureFormat.DefaultHDR);
             renderTexture.name = "ParticleEffectTexture";
             renderTexture.antiAliasing = 4; // Add anti-aliasing
         }

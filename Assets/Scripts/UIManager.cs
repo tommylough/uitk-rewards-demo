@@ -7,10 +7,10 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
     [SerializeField] List<Sprite> sprits;
-    [SerializeField] UIParticleEffect particleEffect; // Add this reference
+    [SerializeField] UIParticleEffect particleEffect;
     
     Rewards rewards;
-    VisualElement particleContainer; // Store reference to particle container
+    VisualElement particleContainer;
     
     void Start()
     {
@@ -19,7 +19,14 @@ public class UIManager : MonoBehaviour
 
     void OnEnable()
     {
-        Signals.OnSpinTimedOut += StartEffects;
+        Signals.OnSpinComplete += StartEffects;
+    }
+    
+    void OnDisable()
+    {
+        Signals.OnSpinComplete -= StartEffects;
+        
+        rewards?.DisableEvents();
     }
 
     void OnValidate()
@@ -41,23 +48,17 @@ public class UIManager : MonoBehaviour
         StyleSheet styleSheet = Resources.Load<StyleSheet>("UI/Styles/Rewards");
         root.styleSheets.Add(styleSheet);
 
-        VisualElement ui = GenerateUI();
-        root.Add(ui);
-        
-        // Create particle container at root level (renders on top)
-        particleContainer = new VisualElement();
-        particleContainer.name = "particle-container";
-        particleContainer.style.position = Position.Absolute;
-        particleContainer.style.width = Length.Percent(100);
-        particleContainer.style.height = Length.Percent(100);
-        particleContainer.style.left = 0;
-        particleContainer.style.top = 0;
-        particleContainer.pickingMode = PickingMode.Ignore;
-        
-        root.Add(particleContainer); // Add to root after main UI
+        root.Add(GenerateUI());
+        root.Add(GenerateParticleContainer()); // Add to root after main UI
         
         // Setup particle effects after UI is created
         SetupParticleEffects();
+    }
+    
+    void GenerateTempImage()
+    {
+        VisualElement tempImage = UIToolkitUtils.Create<Image>("temp-bg-image");
+        uiDocument.rootVisualElement.Add(tempImage);
     }
 
     VisualElement GenerateUI()
@@ -69,6 +70,13 @@ public class UIManager : MonoBehaviour
         mobileContainer.Add(rewards);
         
         return mobileContainer;
+    }
+    
+    VisualElement GenerateParticleContainer()
+    {
+        particleContainer = UIToolkitUtils.Create("particle-container");
+        particleContainer.pickingMode = PickingMode.Ignore;
+        return particleContainer;
     }
     
     void SetupParticleEffects()

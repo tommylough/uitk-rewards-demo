@@ -172,3 +172,7 @@ GoogleService-Info.plist
 
 # Crash Files
 mono_crash.*.json
+
+# Recovery
+Assets/_Recovery/
+Assets/_Recovery.meta
