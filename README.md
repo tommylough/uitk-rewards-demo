@@ -2,7 +2,7 @@
 
 Unity 6 project demonstrating modern UI development with UI Toolkit, featuring visual effects and animations for enhanced user interaction.
 
-Demo: https://youtube.com/shorts/XqV57Jn4Mu0
+Demo: https://www.youtube.com/watch?v=C_DGBY4biLg
 
 ## Features
 
