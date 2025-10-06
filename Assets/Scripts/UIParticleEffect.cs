@@ -14,19 +14,41 @@ public class UIParticleEffect : MonoBehaviour
 
     int effectCount;
     
-    void Start()
-    {
-        SetupParticleSystems();
-    }
-    
     public void SetTargetElement(VisualElement element)
     {
         targetElement = element;
         
-        // Clear any background-image that might be set
         targetElement.style.backgroundImage = StyleKeyword.None;
         
         CreateParticleOverlay();
+    }
+
+    void OnEnable()
+    {
+        Signals.OnSlotWheelTargetSelected += OnSlotWheelTargetSelected;
+    }
+    
+    void OnDisable()
+    {
+        Signals.OnSlotWheelTargetSelected -= OnSlotWheelTargetSelected;
+    }
+    
+    void Start()
+        {
+            SetupParticleSystems();
+        }
+    
+    void OnSlotWheelTargetSelected(string targetName)
+    {
+        ParticleSystem ps = particleData[3].ps;
+        
+        var textureSheet = ps.textureSheetAnimation;
+
+        var slice = SpriteSliceManager.GetSpriteSliceByName(targetName);
+        
+        if (slice == null) return;
+        
+        textureSheet.SetSprite(0, slice);
     }
     
     void CreateParticleOverlay()
@@ -38,24 +60,20 @@ public class UIParticleEffect : MonoBehaviour
         if (existingOverlay != null)
             targetElement.Remove(existingOverlay);
         
-        // Create overlay element that renders on top
-        var particleOverlay = new VisualElement();
-        particleOverlay.name = "particle-overlay";
-        particleOverlay.style.position = Position.Absolute;
-        particleOverlay.style.width = Length.Percent(100);
-        particleOverlay.style.height = Length.Percent(100);
-        particleOverlay.style.left = 0;
-        particleOverlay.style.top = 0;
-        particleOverlay.style.backgroundImage = Background.FromRenderTexture(particleRenderer.renderTexture);
-        particleOverlay.pickingMode = PickingMode.Ignore;
+        targetElement.Add(GenerateParticleOverlay());
+    }
+    
+    VisualElement GenerateParticleOverlay()
+    {
+        VisualElement element = UIToolkitUtils.Create("particle-container");
+        element.style.backgroundImage = Background.FromRenderTexture(particleRenderer.renderTexture);
+        element.pickingMode = PickingMode.Ignore;
         
-        // Add as last child (renders on top)
-        targetElement.Add(particleOverlay);
+        return element;
     }
     
     public void Initialize()
     {
-        // Only use overlay approach, don't set background-image
         CreateParticleOverlay();
     }
     
@@ -97,7 +115,7 @@ public class UIParticleEffect : MonoBehaviour
     
     void SendOnCompleteSignal()
     {
-        Signals.OnComplete?.Invoke();
+        Signals.OnParticlesComplete?.Invoke();
     }
     
     public void StopEffect()
@@ -124,8 +142,7 @@ public class UIParticleEffect : MonoBehaviour
         
         particleRenderer.SetCameraPosition(worldPos);
         
-        // Scale camera to match UI element size (made bigger)
-        float uiSize = Mathf.Max(elementRect.width, elementRect.height) * 0.05f; // Changed from 0.01f to 0.05f for 5x bigger
+        float uiSize = Mathf.Max(elementRect.width, elementRect.height) * 0.05f;
         particleRenderer.SetCameraSize(uiSize);
     }
     

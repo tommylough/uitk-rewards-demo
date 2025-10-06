@@ -11,6 +11,8 @@ Demo: https://youtube.com/shorts/XqV57Jn4Mu0
 - Curved and animated dynamic text that can be localized
 - Usage of sprite sheets in the USS styles
 - Majority code driven UI 
+- Responsive design for multiple screen sizes
+- Scriptable Objects for animation configuration
 
 ## Getting Started
 

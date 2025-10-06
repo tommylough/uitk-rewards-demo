@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,58 +7,93 @@ public class JuicyReward : VisualElement
     VisualElement rewardContainer;
     VisualElement rewardPanel;
     VisualElement topRibbon;
+    VisualElement mask;
 
     CurvedText curvedText;
-
-    RouletteWheel rouletteWheel;
-    
+    Reel reel;
     ShakeEffect shakeEffect;
     
+    JuicyRewardsDataSO data;
+    
+    int ribbonTextTotal;
+    int ribbonTextCount;
 
-    public JuicyReward()
+    float panelStartTop;
+
+    public JuicyReward(JuicyRewardsDataSO dataSo)
     {
+        data = dataSo;
+        
         Generate();
         
         EnableEvents();
     }
     
-    void EnableEvents()
+    public void DisableEvents()
     {
         Signals.OnStartAnimation -= Play;
-        Signals.OnComplete -= Reset;
+        Signals.OnParticlesComplete -= Reset;
         
+        shakeEffect.DisableEvents();
+    }
+    
+    void EnableEvents()
+    {
         Signals.OnStartAnimation += Play;
-        Signals.OnComplete += Reset;
+        Signals.OnParticlesComplete += Reset;
+        Signals.OnReelSpinStart += StartShake;
     }
     
     void Reset() {
-        topRibbon.RemoveFromClassList("show-reward-top-ribbon");
-        rewardPanel.RemoveFromClassList("show-reward-panel");
         
-        ResetTextAnimation();
+        //HideTopRibbon();
+        HidePanel();
     }
 
     void Play()
     {
-        schedule.Execute(ShowTopRibbon).StartingIn(250);
-        schedule.Execute(ShowRibbonText).StartingIn(750);
-        
-        schedule.Execute(ShowPanel).StartingIn(2000);
-        schedule.Execute(StartShake).StartingIn(3000);
+        ShowTopRibbon();
     }
-
+    
     void ShowTopRibbon()
     {
-        topRibbon.AddToClassList("show-reward-top-ribbon");
+        USSMultiTransition.Create(topRibbon, data.showRibbonDuration)
+            .AddScale(1f)
+            .SetEase(EasingMode.EaseOutBack)
+            .OnComplete(ShowRibbonText)
+            .Play();
+            
         SoundManager.Instance.PlaySFX("ShowRibbon");
+    }
+
+    void HideTopRibbon()
+    {
+        USSMultiTransition.Create(topRibbon, data.showRibbonDuration)
+            .AddScale(0)
+            .SetEase(EasingMode.EaseInBack)
+            .OnComplete(ResetTextAnimation)
+            .Play();
     }
 
     void ShowPanel()
     {
-        rewardPanel.AddToClassList("show-reward-panel");
-        SoundManager.Instance.PlaySFX("ShowPanel");
+        float parentHeight = mask.resolvedStyle.height;
+        float targetInPixels = parentHeight * data.showPanelTopTargetPercent;
         
-        Signals.OnSpinStart?.Invoke();
+        rewardPanel.DOTop(targetInPixels, data.showPanelTopDuration)
+            .SetEase(EasingMode.EaseOutBounce)
+            .OnComplete(() => Signals.OnPanelShowComplete?.Invoke())
+            .Play();
+        
+        SoundManager.Instance.PlaySFX("ShowPanel");
+    }
+    
+    void HidePanel()
+    {
+        rewardPanel.DOTop(panelStartTop, data.showPanelTopDuration)
+            .SetEase(EasingMode.EaseInBack)
+            .OnComplete(HideTopRibbon)
+            .Play();
     }
 
     void StartShake()
@@ -88,14 +122,22 @@ public class JuicyReward : VisualElement
 
     VisualElement GeneratePanel()
     {
-        VisualElement mask = UIToolkitUtils.Create("reward-container-panel-mask");
+        mask = UIToolkitUtils.Create("reward-container-panel-mask");
         
         rewardPanel = UIToolkitUtils.Create("reward-container-panel");
         rewardPanel.style.backgroundImage = new StyleBackground(SpriteSliceManager.GetSpriteSliceByName("GUI_28"));
         
-        rewardPanel.Add(GenerateRoulette());
+        rewardPanel.Add(Generatereel());
 
         mask.Add(rewardPanel);
+        
+        EventCallback<GeometryChangedEvent> callback = null;
+        callback = (_) =>
+        {
+            rewardPanel.UnregisterCallback(callback);
+            panelStartTop = rewardPanel.resolvedStyle.top;
+        };
+        rewardPanel.RegisterCallback(callback);
         
         return mask;
     }
@@ -130,18 +172,36 @@ public class JuicyReward : VisualElement
 
         float delay = 0f;
         
+        ribbonTextTotal = characterLabels.Count;
+        
         foreach (var label in characterLabels)
         {
-            label.style.transitionDelay = new List<TimeValue> { new (delay) };
-            label.style.opacity = 1;
-            label.style.scale = new Scale(new Vector2(1, 1));
+            USSMultiTransition.Create(label, data.ribbonTextDuration)
+                .AddScale(data.ribbonTextScale)
+                .AddOpacity(1f)
+                .SetEase(EasingMode.EaseOutBack)
+                .SetDelay(delay)
+                .OnComplete(ShowRibbonTextComplete)
+                .Play();
             
-            delay += 0.05f;
+            delay += data.ribbonTextStaggerIncrement;
         }
+    }
+    
+    void ShowRibbonTextComplete()
+    {
+        ribbonTextCount++;
+        
+        if(ribbonTextCount != ribbonTextTotal -1) 
+            return;
+        
+        ShowPanel();
     }
     
     void ResetTextAnimation()
     {
+        ribbonTextCount = 0;
+        
         List<Label> characterLabels = curvedText.GetLabels();
 
         foreach (var label in characterLabels)
@@ -153,10 +213,10 @@ public class JuicyReward : VisualElement
         }
     }
 
-    VisualElement GenerateRoulette()
+    VisualElement Generatereel()
     {
-        rouletteWheel = new RouletteWheel();
+        reel = new Reel(data.reelData);
 
-        return rouletteWheel;
+        return reel;
     }
 }

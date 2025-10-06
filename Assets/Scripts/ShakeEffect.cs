@@ -5,7 +5,7 @@ public class ShakeEffect : VisualElement
 {
     float shakeDuration = 3f;
     float shakeIntensity = 20f;
-    float shakeStepDuration = 0.05f; // Fixed step duration for intense shaking
+    float shakeStepDuration = 0.05f; 
 
     VisualElement targetElement;
     bool isShaking;
@@ -39,6 +39,11 @@ public class ShakeEffect : VisualElement
         shakeIntensity = intensity;
         shakeStepDuration = stepDuration;
         TriggerShake();
+    }
+    
+    public void DisableEvents()
+    {
+        //[Optional: Add any event unsubscription logic here if needed]
     }
 
     void StartShake()
@@ -86,12 +91,11 @@ public class ShakeEffect : VisualElement
 
         targetElement.style.translate = new Translate(0, 0);
 
-        // Schedule removal of shaking class after a brief delay
         targetElement.schedule.Execute(() =>
         {
             targetElement.RemoveFromClassList("shake-element--shaking");
             isShaking = false;
-        }).StartingIn(100); // 100ms delay
+        }).StartingIn(100);
     }
 
     void StopCurrentShake()

@@ -11,55 +11,20 @@
     text-shadow: 2px 2px 4px #000000;
 }
 
+.temp-bg-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: resource("Images/juice_panel_down");
+}
+
 .rewards-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     height: 100%;
-}
-
-.reward-container {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
-
-.reward-container-panel-mask {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    width: 100%;
-    height: 360px;
-}
-
-.reward-container-panel {
-    position: absolute;
-    top: -320px;
-    width: 300px;
-    height: 320px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    transition-property: top;
-    transition-timing-function: ease-out-bounce;
-    transition-duration: 0.4s;
-}
-
-.buttons-container {
-    margin-top: auto;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    padding: 40px;
-    width: 100%;
 }
 
 .reward-button {
@@ -75,18 +40,52 @@
     margin-bottom: 10px;
 }
 
+.reward-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
 .reward-top-ribbon {
-    position: absolute;
-    width: 500px;
-    height: 112px;
-    top: -30px;
+    width: 94%;
+    height: 20%;
+    top: 0;
     scale: 0;
     background-size: contain;
     background-repeat: no-repeat;
-
     transition-property: scale;
-    transition-timing-function: ease-out-back;
-    transition-duration: 0.4s;
+}
+
+.reward-container-panel-mask {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    top: 10%;
+    width: 100%;
+    height: 100%;
+}
+
+.reward-container-panel {
+    position: absolute;
+    top: -50%;
+    width: 62%;
+    height: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition-property: top;
+}
+
+.buttons-container {
+    margin-top: auto;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 40px;
+    width: 100%;
 }
 
 .curved-text-container {
@@ -108,20 +107,12 @@
     text-shadow: 2px 2px 4px #000000;
 }
 
-.show-reward-panel {
-    top: 40px;
-}
-
-.show-reward-top-ribbon {
-    scale: 1;
-}
-
 .show-cured-text {
     scale: 1;
     opacity: 1;
 }
 
-.roulette-container {
+.reel-container {
     position: relative;
     display: flex;
     align-items: center;
@@ -130,34 +121,31 @@
     width: 100%;
 }
 
-.roulette-mask {
+.reel-mask {
     position: absolute;
-    display: flex;
     overflow: hidden;
     align-items: center;
-    justify-content: center;
-    width: 50%;
-    height: 200px;
+    width: 100%;
+    height: 60%;
 }
 
-.roulette-cover {
+.reel-cover {
     position: absolute;
-    width: 150px;
-    height: 200px;
+    height: 60%;
+    width: 64%;
     background-size: contain;
     background-repeat: no-repeat;
     background-image: resource("Images/ui_wheel_cover");
 }
 
-.roulette-strip {
+.reel-strip {
     position: absolute;
     align-items: center;
     width: 150px;
-    height: 2000px;
     background-color: lightgray;
 }
 
-.roulette-strip-image {
+.reel-strip-image {
     display: flex;
     width: 120px;
     height: 120px;
@@ -165,7 +153,6 @@
     background-size: contain;
     margin: 10px 0;
 }
-
 
 .shake-element {
     transition-property: translate;
@@ -180,33 +167,36 @@
 
 .flash-sparkle {
     position: absolute;
-    width: 220px;
-    height: 300px;
+    width: 120%;
+    height: 120%;
     scale: 0;
     opacity: 0;
     background-size: contain;
     background-repeat: no-repeat;
     background-image: resource("Images/wheel_sparkle");
-    transition-property: scale, opacity;
-    transition-timing-function: ease-in-elastic;
-    transition-duration: 0.15s;
+    transition-property: scale;
 }
 
 .flash-cover {
     position: absolute;
-    width: 150px;
-    height: 520px;
+    width: 100%;
+    height: 100%;
     scale: 0;
     opacity: 0;
     background-repeat: no-repeat;
     background-image: resource("Images/wheel_flash");
     transition-property: scale, opacity;
     transition-timing-function: ease-in-elastic;
-    transition-duration: 0.09s;
-    transition-delay: 0.03s;
+}
+
+.particle-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 
 .disableButton {
     opacity: 0.6;
-    picking-mode: ignore;
 }
